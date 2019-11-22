@@ -1,0 +1,317 @@
+<!doctype html>
+<html class="no-js" lang="zxx">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>book-detail</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/plugins.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/custom.css">
+    <script src="js/vendor/modernizr-3.5.0.min.js"></script>
+
+    <style>
+
+    </style>
+</head>
+
+
+<body>
+    <div class="maincontent bg--white pt--80 pb--55">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-12">
+                    <div class="wn__single__product">
+                        <div class="row">
+
+                            <div class="col-lg-3 col-12">
+
+                                <div class="wn__fotorama__wrapper">
+                                    <img id="imageContent">
+                                </div>
+                            </div>
+                            <div class="col-lg-7 col-12">
+                                <div class="product__info__main">
+                                    <h1 id='title'>Book Title</h1>
+                                    <div class="product-info-stock-sku d-flex">
+                                        <p>Available: <span id='avail'></span></p>
+                                        <p> Total Number: <span id='total_num'></span></p>
+                                    </div>
+                                    <br>
+                                    <div class="product-color-label">
+                                        <h1>Infomation</h1>
+                                        <ul class="pro__attribute" style="font-size: 16px">
+                                            <li id='isbn'>ISBN: </li>
+                                            <li id='type'>Category: </li>
+                                            <li id='author'>Authors: </li>
+                                            <li id='press'>Publisher: </li>
+                                            <li id='page'>Page: </li>
+                                            <li id='year'>Publish year: </li>
+                                        </ul>
+                                    </div>
+
+                                    
+                                </div>
+                            </div>
+                            <div class="col-lg-10 col-12" style="padding-top: 20px; padding-bottom: 20px">
+                                <hr>
+                                <div class="product__overview" style="padding-bottom: 20px">
+                                    <p id='subject' style="padding-top: 20px">Description of the book.</p>
+                                </div>
+                                <hr>
+                            </div>
+                            <hr>             
+                            <div class="col-lg-10 col-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h3>All Copies</h3>
+                                    </div>
+                        <div class="panel-body" style="padding-top: 10px">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover" id="dataTables">
+                                    <thead>
+                                        <tr>
+                                            <th>TITLE</th>                        
+                                            <th>BARCODE</th>
+                                            <th>LOCATION</th>
+                                            <th>OPERATION</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="copy_list">
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                        </div>
+                       
+                    </div>
+                    </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+
+    <script src="../cookie.js"></script>
+    <script src="../socket.io.js"></script>
+    <script src="js/vendor/jquery-3.2.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/plugins.js"></script>
+    <script src="../ipconfig.js"></script>
+    <script>
+        var href = location.href;
+        var auth_data = {};
+
+        auth_data.username = Cookies.get("username");
+        auth_data.session = Cookies.get("session");
+        auth_data.type = Cookies.get("type");
+        auth_data.cur = "reader";
+
+        var socket = io(ip);
+
+        function showBookDetail(data) {
+            if (data.figure != null) {
+                document.getElementById("imageContent").setAttribute("src", data.figure);
+            }
+            if (data.book_name != null) {
+                var title = document.getElementById('title');
+                title.innerHTML = data.book_name;
+            }
+            if (data.author != null) {
+                var author = document.getElementById('author');
+                author.innerHTML = '• Author: ' + data.author;
+            }
+            if (data.type != null) {
+                var type = document.getElementById('type');
+                type.innerHTML = '• Type: ' + data.type;
+            }
+            if (data.press != null) {
+                var press = document.getElementById('press');
+                press.innerHTML = '• Press: ' + data.press;
+            }
+            if (data.page != null) {
+                var page = document.getElementById('page');
+                page.innerHTML = '• Page: ' + data.page;
+            }
+            if (data.publish_year != null) {
+                var year = document.getElementById('year');
+                year.innerHTML = '• Publish year: ' + data.publish_year;
+            }
+            if (data.isbn != null) {
+                var isbn = document.getElementById('isbn');
+                isbn.innerHTML = '• ISBN: ' + data.isbn;
+            }
+            if (data.subject != null) {
+                document.getElementById('subject').innerHTML = data.subject;
+            }
+            if (data.available_number != null) {
+                var avail = document.getElementById('avail');
+                avail.innerHTML = data.available_number;
+            }
+            if (data.total_number != null && data.available_number != null) {
+                var left = document.getElementById('total_num');
+                left.innerHTML = data.total_number;
+            }
+        }
+
+        function showCopyList(data){
+            var book = data.book;
+            var borrowedList = data.borrowed;
+            var reservedList = data.reserved;
+            var availList = data.available;
+
+            var copyList = document.getElementById('copy_list');
+
+            for(var i=0;i<availList.length;i++){
+                var copy_item = document.createElement('tr');
+                copy_item.setAttribute('class','odd gradeX');
+
+                var td_name = document.createElement('td');
+                td_name.innerHTML = book.book_name;
+                copy_item.appendChild(td_name)
+
+                var td_barcode = document.createElement('td');
+                td_barcode.innerHTML = availList[i].bar_code;
+                copy_item.appendChild(td_barcode);
+
+                var td_location = document.createElement('td');
+                td_location.innerHTML = availList[i].location;
+                copy_item.appendChild(td_location);
+
+                var i_reserve = document.createElement('i');
+                i_reserve.setAttribute('class','fa fa-bookmark  fa-fw');
+                var a_reserve = document.createElement('a');
+                a_reserve.setAttribute('name',availList[i].bar_code);
+                a_reserve.setAttribute('onclick','reserveCopy(this.name)');
+                a_reserve.setAttribute('href','#');
+                a_reserve.innerHTML = 'RESERVE';
+                a_reserve.appendChild(i_reserve);
+                var td_reserve = document.createElement('td');
+                td_reserve.appendChild(a_reserve);
+                copy_item.appendChild(td_reserve);
+                copyList.appendChild(copy_item);
+            }
+            for(var i=0;i<reservedList.length;i++){
+                var copy_item = document.createElement('tr');
+                copy_item.setAttribute('class','odd gradeX');
+
+                var td_name = document.createElement('td');
+                td_name.innerHTML = book.book_name;
+                copy_item.appendChild(td_name)
+
+                var td_barcode = document.createElement('td');
+                td_barcode.innerHTML = reservedList[i].bar_code;
+                copy_item.appendChild(td_barcode);
+
+                var td_location = document.createElement('td');
+                td_location.innerHTML = reservedList[i].location;
+                copy_item.appendChild(td_location);
+
+                var td_reserve = document.createElement('td');
+                td_reserve.innerHTML = '<font color="red">RESERVED</font>';
+                copy_item.appendChild(td_reserve);
+                copyList.appendChild(copy_item);
+            }
+            for(var i=0;i<borrowedList.length;i++){
+                var copy_item = document.createElement('tr');
+                copy_item.setAttribute('class','odd gradeX');
+
+                var td_name = document.createElement('td');
+                td_name.innerHTML = book.book_name;
+                copy_item.appendChild(td_name)
+
+                var td_barcode = document.createElement('td');
+                td_barcode.innerHTML = borrowedList[i].bar_code;
+                copy_item.appendChild(td_barcode);
+
+                var td_location = document.createElement('td');
+                td_location.innerHTML = borrowedList[i].location;
+                copy_item.appendChild(td_location);
+
+                var td_reserve = document.createElement('td');
+                td_reserve.innerHTML = '<font color="blue">BORROWED</font>';
+                copy_item.appendChild(td_reserve);
+                copyList.appendChild(copy_item);
+                //window.alert(2);
+            }
+
+            /*
+                                    <tbody id="copy_list">
+                                        <tr class="odd gradeX">
+                                            <td>Deep Leearning</td>
+                                            <td>123-321</td>
+                                            <td>O12346</td>
+                                            <td>
+                                                <a href="#"><i class="fa fa-bookmark  fa-fw"></i> RESERVE</a>
+                                            </td> 
+                                            <!-- <td class="text-center">15</td>  -->                                           
+                                        </tr>
+
+            */
+        }
+
+        function reserveCopy(bar_code){
+            var reserve_auth = auth_data;
+            reserve_auth.req = {req:'reserve', bar_code:parseInt(bar_code)};
+            socket.emit('sessionAuth',reserve_auth);
+        }
+
+        var isbn = Cookies.get("cur_book");
+        
+        socket.on("showReserveDetail", function (data) {
+            //window.alert(JSON.stringify(data.book));
+            showBookDetail(data.book);
+            showCopyList(data);
+        });
+
+        socket.on("noSession", function (data) {
+            Cookies.remove('type');
+            window.alert('Login has expired, please login again!');
+            //noLogin();
+        });
+
+        socket.on("sessionFailed", function (data) {
+            Cookies.remove('type');
+            window.alert('Login has expired, please login again!');
+            //noLogin();
+        });
+
+        socket.on('sessionSuccess',function(data){
+            if(data.req=='reserve'){
+                var item = {};
+                item.reader_id = auth_data.username;
+                item.isbn = isbn;
+                item.bar_code = data.bar_code;
+                socket.emit('reserveBook',item);
+            }
+        });
+
+        socket.on('reserveSuccess',function(data){  //location, bar_code
+            window.alert('Reserve success!\nbook\'s id: '+data.bar_code+'\nlocation: '+data.location);
+            location.reload();
+        });
+
+        socket.on('reserveOverflow',function(data){
+            window.alert('You can only reserve '+data+' books.');
+        });
+
+        socket.on('noneToReserve',function(){
+            window.alert('This copy is not available.');
+        });
+
+
+        socket.emit("getReserveDetail", isbn);
+
+    </script>
+
+</body>
+
+</html>

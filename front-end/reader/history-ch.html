@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+      <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta content="" name="description" />
+    <meta content="webthemez" name="author" />
+    <title>Book History</title>
+    <!-- Bootstrap Styles-->
+    <link href="assets/css/bootstrap.css" rel="stylesheet" />
+     <!-- FontAwesome Styles-->
+    <link href="assets/css/font-awesome.css" rel="stylesheet" />
+     <!-- Morris Chart Styles-->
+   
+        <!-- Custom Styles-->
+    <link href="assets/css/custom-styles.css" rel="stylesheet" />
+     <!-- Google Fonts-->
+     <!--
+        <link href='http://fonts.useso.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+     -->
+   
+     <!-- TABLE STYLES-->
+    <link href="assets/js/dataTables/dataTables.bootstrap.css" rel="stylesheet" />
+</head>
+<body>
+ <div id="wrapper">
+        <nav class="navbar navbar-default top-navbar" role="navigation">
+            <div class="navbar-header">
+                <a href="index.html"><img src="images/logo/logo黑字.png" width = 190px height = 65px ></a>
+                <!-- <a class="navbar-brand" href="index.html"><img src="images/logo/logo黑字.png" width = 205px height = 60px ></a> -->     
+            </div>
+            <ul class="nav navbar-top-links navbar-right">
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                        <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                         <li><a href="#"><i class="fa fa-user fa-fw"></i> 语言</a>
+                             <li>                                  
+                                    <li><a href="history.html"><i class="fa fa-none fa-fw"></i>English</a></li>
+                                    <!-- 瞎写的类，不知道有没有，留空用的 -->
+                                    <li><a href="#"><i class="fa fa-none fa-fw"></i>中文</a></li>                                 
+                            </li> 
+                        </li>
+                        <li class="divider"></li>
+                        <li><a href="index.html" onclick="logOut()"><i class="fa fa-sign-out fa-fw"></i> 登出</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+        </nav>
+        <!--/. NAV TOP  -->
+       <!--/. NAV TOP  -->
+        <nav class="navbar-default navbar-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav" id="main-menu">
+
+                    <li>
+                        <a  href="profile-ch.html"><i class="fa fa-fw fa-file"></i> 个人信息</a>
+                    </li>
+                    <!-- <li>
+                        <a href="change-password.html"><i class="fa fa-edit"></i> Change password<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="change-password.html">remember password</a>
+                            </li>
+                            <li>
+                                <a href="change-password.html">forget password</a>
+                            </li>
+                        </ul>
+                    </li>      -->  
+                    <li>
+                        <a href="change-password-ch.html"><i class="fa fa-edit"></i> 更改密码</a>
+                    </li>                                       
+                    <li>
+                        <a  class="active-menu" href="history-ch.html"><i class="fa fa-table"></i> 历史记录</a>
+                    </li>  
+                    <li>
+                        <a href="reserve-ch.html"><i class="fa fa-table"></i> 预约书籍</a>
+                    </li>                  
+                </ul>
+
+            </div>
+
+        </nav>
+        <!-- /. NAV SIDE  -->
+        <div id="page-wrapper" >
+            <div class="header"> 
+                        <h1 class="page-header">
+                            阅读历史 <small id='fine'>您已读过的书</small>
+                        </h1>       
+            </div>
+        
+            <div id="page-inner"> 
+               
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- Advanced Tables -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                             书籍列表
+                        </div>
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                    <thead>
+                                        <tr>
+                                            <th>标题</th>                       
+                                            <th>条形码</th>
+                                            <th>借书时间</th>
+                                            <th>归还时间</th>
+                                            <th>超时罚款</th>                                               
+                                        </tr>
+                                    </thead>
+                                    <tbody id='list_body'>
+                                        
+                       
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                        </div>
+                       
+                    </div>
+                    <!--End Advanced Tables -->
+                     <footer><p align="center">©2018 XDU-SPM-B2 Copyright</p></footer>
+                </div>
+            </div>
+                <!-- /. ROW  -->
+        </div>
+              
+    </div>
+             <!-- /. PAGE INNER  -->
+            </div>
+         <!-- /. PAGE WRAPPER  -->
+     <!-- /. WRAPPER  -->
+    <!-- JS Scripts-->
+    <!-- jQuery Js -->
+    <script src="assets/js/jquery-1.10.2.js"></script>
+      <!-- Bootstrap Js -->
+    <script src="assets/js/bootstrap.min.js"></script>
+    <!-- Metis Menu Js -->
+    <script src="assets/js/jquery.metisMenu.js"></script>
+     <!-- DATA TABLE SCRIPTS -->
+    <script src="assets/js/dataTables/jquery.dataTables.js"></script>
+    <script src="assets/js/dataTables/dataTables.bootstrap.js"></script>
+        <script>
+            $(document).ready(function () {
+                //$('#dataTables-example').dataTable();
+            });
+    </script>
+         <!-- Custom Js -->
+    <script src="assets/js/custom-scripts.js"></script>
+    <script src="../cookie.js"></script>
+    <script src="../socket.io.js"></script>
+    <script src="../ipconfig.js"></script>
+    <script type="text/javascript">
+        var auth_data={};
+        auth_data.username = Cookies.get("username");
+        auth_data.session = Cookies.get("session");
+        auth_data.type = Cookies.get("type");
+        auth_data.cur = "reader";  
+        var socket = io(ip);
+        var list_body = document.getElementById('list_body');
+        function logOut(){
+            Cookies.remove('type');
+            socket.emit('logOut',auth_data);
+        }
+
+        socket.on("noSession", function (data) {
+            window.alert("登录已过期，请重新登录!");
+            Cookies.remove('type');
+            location.href = location.href.replace("history-ch.html","index.html");
+        });
+
+        socket.on("sessionFailed", function (data) {
+            window.alert("用户类型不一致，请重新登录!");
+            Cookies.remove('type');
+            location.href = location.href.replace("history-ch.html","index.html");
+        });
+        socket.on('showBorrowList',function(data){
+            var totalFine = 0;
+            var showList = []
+            for(var i=0;i<data.length;i++){
+                var showItem = [];
+                showItem.push(data[i].book_name);
+                showItem.push(data[i].bar_code);
+
+                var borrow_time = new Date(data[i].borrow_date);
+                borrow_time = borrow_time.getFullYear()+'-'+(borrow_time.getMonth()+1)+'-'+borrow_time.getDate();
+                showItem.push(borrow_time);
+
+                var return_time = null;
+                if(data[i].return_date!=null){
+                    return_time = new Date(data[i].return_date);
+                    return_time = return_time.getFullYear()+'-'+(return_time.getMonth()+1)+'-'+return_time.getDate();
+                }else{
+                    return_time = '<font color="#FF0000">not returned yet</font>';
+                }
+                showItem.push(return_time);
+
+                showItem.push('<font color="#FF0000">'+data[i].fine+'</font>');
+                showList.push(showItem);
+                totalFine += data[i].fine;
+            }
+            var fineText = document.getElementById('fine');
+            fineText.innerHTML='当前待支付罚金: <font color="#FF0000">'+ totalFine+'</font> '
+            $('#dataTables-example').dataTable({data:showList});
+            /*
+                                        <tr class="odd gradeX">
+                                            <td>Deep Leearning</td>
+                                            <td>123-321</td>
+                                            <td>2018-7-1</td>
+                                            <td>2018-9-1</td>
+                                            <td>15</td>                                            
+                                        </tr>    
+
+            */
+        });
+
+
+        socket.emit('sessionAuth',auth_data);   
+        socket.emit('getBorrowList',auth_data.username);
+        
+    </script>
+    
+   
+</body>
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta content="" name="description" />
+    <meta content="webthemez" name="author" />
+    <title>Reader Profile</title>
+    <!-- Bootstrap Styles-->
+    <link href="assets/css/bootstrap.css" rel="stylesheet" />
+     <!-- FontAwesome Styles-->
+    <link href="assets/css/font-awesome.css" rel="stylesheet" />
+    
+    <link href="assets/css/select2.min.css" rel="stylesheet" >
+    <link href="assets/css/checkbox3.min.css" rel="stylesheet" >
+        <!-- Custom Styles-->
+    <link href="assets/css/custom-styles.css" rel="stylesheet" />
+     <!-- Google Fonts-->
+     <!--
+<link href='http://fonts.useso.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+     -->
+   
+</head>
+<body>
+    <div id="wrapper">
+        <nav class="navbar navbar-default top-navbar" role="navigation">
+            <div class="navbar-header">
+                <a href="index.html"><img src="images/logo/logo黑字.png" width = 190px height = 65px ></a>
+                <!-- <a class="navbar-brand" href="index.html"><img src="images/logo/logo黑字.png" width = 205px height = 60px ></a> -->     
+            </div>
+            <ul class="nav navbar-top-links navbar-right">
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                        <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                         <li><a href="#"><i class="fa fa-user fa-fw"></i> 语言</a>
+                             <li>                                  
+                                    <li><a href="profile.html"><i class="fa fa-none fa-fw"></i>English</a></li>
+                                    <!-- 瞎写的类，不知道有没有，留空用的 -->
+                                    <li><a href="#"><i class="fa fa-none fa-fw"></i>中文</a></li>                                 
+                            </li> 
+                        </li>
+                        <li class="divider"></li>
+                        <li><a href="index.html" onclick="logOut()"><i class="fa fa-sign-out fa-fw"></i> 登出</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+        </nav>
+        <!--/. NAV TOP  -->
+        <!--/. NAV TOP  -->
+        <nav class="navbar-default navbar-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav" id="main-menu">
+
+                    <li>
+                        <a class="active-menu" href="profile-ch.html"><i class="fa fa-fw fa-file"></i> 个人中心</a>
+                    </li>
+                    <!-- <li>
+                        <a href="change-password.html"><i class="fa fa-edit"></i> Change password<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="change-password.html">remember password</a>
+                            </li>
+                            <li>
+                                <a href="change-password.html">forget password</a>
+                            </li>
+                        </ul>
+                    </li>      -->  
+                    <li>
+                        <a href="change-password-ch.html"><i class="fa fa-edit"></i> 更改密码</a>
+                    </li>                                       
+                    <li>
+                        <a href="history-ch.html"><i class="fa fa-table"></i> 历史记录</a>
+                    </li>
+                    <li>
+                        <a href="reserve-ch.html"><i class="fa fa-table"></i> 预约书籍</a>
+                    </li>                    
+                </ul>
+
+            </div>
+
+        </nav>
+        <!-- /. NAV SIDE  -->
+        <div id="page-wrapper" >
+          <div class="header"> 
+                        <h1 class="page-header">
+                             个人简介 <small>查询或改变您的信息</small>
+                        </h1> 
+                                    
+        </div>
+        
+            <div id="page-inner">                     
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <div class="card-title">
+                                        <div class="title">信息列表</div>
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label for="inputID" class="col-sm-2 control-label">读者ID</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control" id="inputID" readonly="readonly" >
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputname" class="col-sm-2 control-label">姓名</label>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control" id="inputname" readonly="readonly">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="inputgender" class="col-sm-2 control-label">性别</label>
+                                            <div class="col-sm-6">
+                                                 <div class="radio3 radio-check radio-inline">
+                                                 <input type="radio" id="radio4" name="radio2" value="Male" checked="" onclick="return false;">
+                                                 <label for="radio4">
+                                                 男
+                                                 </label>
+                                            </div>
+                                            <div class="radio3 radio-check radio-warning radio-inline">
+                                                 <input type="radio" id="radio6" name="radio2" value="Female" onclick="return false;">
+                                                 <label for="radio6">
+                                                 女
+                                                 </label>
+                                            </div>
+                                        </div>                                        
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="inputemail" class="col-sm-2 control-label">邮箱</label>
+                                            <div class="col-sm-6">
+                                                <input type="email" class="form-control" id="inputemail" value="">
+                                            </div>
+                                        </div>                       
+                                    
+                                        <div class="form-group">
+                                            <div class="col-sm-offset-2 col-sm-10">
+                                                <button type="button" onclick="save()" class="btn btn-default">保存</button>
+                                                <button type="button" onclick="var female=false;if(document.getElementById('radio6').checked==true) female=true; reset(); if(female) document.getElementById('radio6').checked=true;" class="btn btn-default">重置</button>
+                                            </div>
+                                           
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+               
+            <footer><p align="center">©2018 XDU-SPM-B2 Copyright</p></footer>
+            </div>
+             <!-- /. PAGE INNER  -->
+            </div>
+         <!-- /. PAGE WRAPPER  -->
+        </div>
+     <!-- /. WRAPPER  -->
+    <!-- JS Scripts-->
+    <!-- jQuery Js -->
+    <script src="assets/js/jquery-1.10.2.js"></script>
+      <!-- Bootstrap Js -->
+    <script src="assets/js/bootstrap.min.js"></script>
+    <!-- Metis Menu Js -->
+    <script src="assets/js/jquery.metisMenu.js"></script>
+    <script src="assets/js/select2.full.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+      $(".selectbox").select2();
+    });
+    </script>
+      <!-- Custom Js -->
+    <script src="assets/js/custom-scripts.js"></script> 
+    <script src="../cookie.js"></script>
+    <script src="../socket.io.js"></script>
+    <script src="../ipconfig.js"></script>
+    <script>
+        var auth_data={};
+        auth_data.username = Cookies.get("username");
+        auth_data.session = Cookies.get("session");
+        auth_data.type = Cookies.get("type");
+        auth_data.cur = "reader";
+        var updataInfo={};
+        
+        var socket = io("http://139.199.112.88:2761");
+        function logOut(){
+            Cookies.remove('type');
+            socket.emit('logOut',auth_data);
+        }
+        function save(){
+            var email_val = $('#inputemail').val();
+            if(email_val.length == 0) {
+                window.alert("邮箱不能为空！");
+                return;
+            } else {
+                var reg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+                var res = reg.test(email_val);
+                if(!res) {
+                    window.alert("邮箱格式不正确!")
+                } else {
+                    updataInfo.reader_id = $('#inputID').val();
+                    updataInfo.phone = $('#inputtel').val();
+                    updataInfo.email = $('#inputemail').val();
+                    var profile_auth = auth_data;
+                    profile_auth.req = 'updateProfile';
+                    socket.emit('sessionAuth',profile_auth);
+                }
+            }
+        }
+
+        socket.on("noSession", function (data) {
+            window.alert("登录已过期，请重新登录!");
+            Cookies.remove('type');
+            location.href = location.href.replace("profile-ch.html","index-ch.html");
+        });
+        socket.on('sessionSuccess',function(data){
+            if(data=='updateProfile'){
+                socket.emit('updateReaderInfo',updataInfo);
+            }
+        });
+        socket.on("sessionFailed", function (data) {
+            window.alert("登录已过期，请重新登录!");
+            Cookies.remove('type');
+            location.href = location.href.replace("profile-ch.html","index-ch.html");
+        });
+        
+        socket.on("readerInfo", function (data) {
+            //window.alert(JSON.stringify(data));
+            $("#inputID").attr("value", data.reader_id);
+            $("#inputname").attr("value", data.name);
+            $("#inputemail").attr("value", data.email);
+            //window.alert($('inputtel').val());
+            //window.alert(data.phone);
+            if(data.gender=='Male'){
+                document.getElementById('radio4').checked=true;
+            }else{
+                document.getElementById('radio6').checked=true;
+            }
+        });
+        socket.on("updateReaderInfoSuccess", function () {
+            window.alert("更新成功！");
+        });
+        
+        socket.emit('sessionAuth',auth_data); 
+        socket.emit('getReaderInfo',auth_data);      
+        
+    </script>
+    
+        
+   
+</body>
+</html>

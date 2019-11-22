@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+
+	<link rel="stylesheet" href="css/amazeui.min.css">
+	<link rel="stylesheet" href="css/admin.css">
+	<link rel="stylesheet" href="css/app.css">
+</head>
+
+<body>
+
+	<div class="am-cf admin-main">
+		<!-- content start -->
+		<div class="admin-content">
+			<div class="admin-content-body">
+				<div class="am-cf am-padding">
+					<div class="am-fl am-cf"><strong class="am-text-primary am-text-lg" style="font-size: 25px">Delete History</strong> / 删除历史</div>
+				</div>
+				<div class="container" style="padding: 10px 10px 0px 10px">
+					<div class="am-g" style="margin-top: -30px;">
+						<div class="am-u-sm-12">
+							<form class="am-form" action="user/delAll.action">
+								<table class="am-table am-table-striped am-table-hover table-main">
+									<thead>
+										<tr>
+											<th>
+												TYPE
+											</th>
+											<th>
+												OPERATOR
+											</th>
+
+											<th>
+												BOOK NAME
+											</th>
+											<th>
+												ISBN
+											</th>
+											<th>
+												BOOK ID
+											</th>
+											<th>
+												TIME
+											</th>
+										</tr>
+
+									</thead>
+									<tbody id="tUser">
+									</tbody>
+								</table>
+
+							</form>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<!-- content end -->
+		</div>
+	</div>
+
+	<!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+	<!--[if (gte IE 9)|!(IE)]><!-->
+	<script src="js/jquery-1.11.3.min.js"></script>
+	<script src="js/jquery-1.11.3.min.js"></script>
+	<script src="../cookie.js"></script>>
+	<script src="../socket.io.js"></script>
+	<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+	<!--<![endif]-->
+	<script type="text/javascript" src="myplugs/js/plugs.js"></script>
+	<script src="../ipconfig.js"></script>
+	<script>
+
+		var socket = io(ip);
+
+
+		function addRecordItem(item) {
+
+			var obj = document.createElement('tr');
+
+			var isbn = document.createElement('td');
+			isbn.innerHTML = item.isbn;
+
+			var bookname = document.createElement('td');
+
+			bookname.innerHTML = item.book_name;
+
+			var barcode = document.createElement('td');
+			if (item.bar_code == 0) {
+				barcode.innerHTML = "ALL COPIES";
+			} else {
+				barcode.innerHTML = item.bar_code;
+			}
+
+			var operation = document.createElement('td');
+			//operation.innerHTML = item.operation;
+
+			var operation_span = document.createElement('span');
+			if (item.operation == "Lost") {
+				operation_span.setAttribute("class", "am-badge am-badge-warning");
+			}
+			if (item.operation == "Damage") {
+				operation_span.setAttribute("class", "am-badge am-badge-danger");
+			}
+			if (item.operation == "OffShelf") {
+				operation_span.setAttribute("class", "am-badge");
+			}
+			operation_span.innerHTML = item.operation;
+			operation.appendChild(operation_span);
+
+			var librarian_id = document.createElement('td');
+			librarian_id.innerHTML = item.librarian_id;
+
+			var time = document.createElement('td');
+			time.innerHTML = item.time.substring(0, 10);
+
+			obj.appendChild(operation);
+			obj.appendChild(librarian_id);
+			obj.appendChild(bookname);
+			obj.appendChild(isbn);
+
+
+			obj.appendChild(barcode);
+			obj.appendChild(time);
+
+			var parent = document.getElementById('tUser');
+			parent.appendChild(obj);
+		}
+
+		socket.on("librarianRecord", function (data) {
+			var obj = document.getElementById('tUser');
+			while (obj.childNodes.length > 0) {
+				obj.removeChild(obj.lastChild);
+			}
+			for (var i = 0; i < data.record.length; i++) {
+				addRecordItem(data.record[i]);
+			}
+		});
+
+		socket.emit("getLibrarianRecord");
+
+
+
+	</script>
+</body>
+
+</html>

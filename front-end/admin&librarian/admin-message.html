@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+
+    <link rel="stylesheet" href="css/amazeui.min.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/app.css">
+</head>
+
+<body>
+
+    <div class="am-cf admin-main">
+        <!-- content start -->
+        <div class="admin-content">
+            <div class="admin-content-body">
+
+                <div class="container" style="padding: 50px 10px 0px 10px">
+
+                    <div class="am-g" style="margin-top: -30px;">
+                        <div class="am-u-sm-12">
+                            <form class="am-form" action="user/delAll.action">
+                                <label style="padding-left: 10px"><h1>Messages Not Read</h1></label>
+                                <table class="am-table am-table-striped am-table-hover table-main">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                Librarian ID
+                                            </th>
+
+                                            <th>
+                                                EMAIL
+                                            </th>
+
+                                            <th>
+                                                Operations
+                                            </th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody id="tUser">
+                                    </tbody>
+                                </table>
+                                <label style="padding-left: 10px"><h1>Messages Have Read</h1></label>
+                                <table class="am-table am-table-striped am-table-hover table-main">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                Librarian ID
+                                            </th>
+
+                                            <th>
+                                                EMAIL
+                                            </th>
+
+                                            <th>
+                                                Status
+                                            </th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody id="tUser1">
+                                    </tbody>
+                                </table>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- content end -->
+        </div>
+    </div>
+
+    <!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+    <!--[if (gte IE 9)|!(IE)]><!-->
+    <script src="js/jquery-1.11.3.min.js"></script>
+    <script src="js/jquery-1.11.3.min.js"></script>
+    <script src="../cookie.js"></script>>
+    <script src="../socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <!--<![endif]-->
+    <script type="text/javascript" src="myplugs/js/plugs.js"></script>
+    <script src="../ipconfig.js"></script>
+    <script>
+
+        var socket = io(ip);
+        var npl;
+        var pl;
+
+        function addNotPendingItem(item, i) {
+            var obj = document.createElement('tr');
+            var librarian_id = document.createElement('td');
+            librarian_id.innerHTML = item.librarian_id;
+
+            var email = document.createElement('td');
+            email.innerHTML = item.email;
+
+            var status = document.createElement('td');
+            var sts_span = document.createElement('span');
+            if(item.status == "Rejected"){
+				sts_span.setAttribute("class", "am-badge am-badge-danger");
+			}
+			if(item.status == "Restored"){
+				sts_span.setAttribute("class", "am-badge am-badge-success");
+			}
+            sts_span.innerHTML = item.status;
+            status.appendChild(sts_span);
+
+            obj.appendChild(librarian_id);
+            obj.appendChild(email);
+            obj.appendChild(status);
+
+            var parent = document.getElementById('tUser1');
+            parent.appendChild(obj);
+        }
+
+        socket.on("sendSuccess",function(data){
+            alert("Send Restore Password Success");
+            location.href = location.href;
+        });
+
+        socket.on("refuseSuccess",function(data){
+            alert("Refuse Success");
+            location.href = location.href;
+        });
+
+        socket.on("sendFail",function(data){
+            alert("Send Failed");
+            location.href = location.href;
+        });
+
+        function accept(index) {
+            socket.emit("SendEmail", pl[index]);
+        }
+
+        function refuse(index){
+            socket.emit("refuse", pl[index].librarian_id);
+        }
+
+        function addPendingItem(item, i) {
+            var obj = document.createElement('tr');
+            var librarian_id = document.createElement('td');
+            librarian_id.innerHTML = item.librarian_id;
+
+            var email = document.createElement('td');
+            email.innerHTML = item.email;
+
+            var accept_span = document.createElement('span');
+            accept_span.setAttribute("class", "fa fa-s_pctim_aiomsg");
+
+            var refuse_span = document.createElement('span');
+            refuse_span.setAttribute("class", "fa fa-s_pctim_aiomsg");
+
+            var btnEdit = document.createElement('button');
+            btnEdit.innerHTML = 'RECOVERY';
+            btnEdit.appendChild(accept_span);
+            btnEdit.setAttribute('class', 'am-btn am-btn-default am-btn-xs am-text-secondary btnEdit');
+            btnEdit.setAttribute('id', i);
+            btnEdit.setAttribute('onclick', 'accept(this.id)');
+            btnEdit.setAttribute('type', 'button');
+
+            var btnDelete = document.createElement('button');
+            btnDelete.innerHTML = 'REJECT';
+            btnDelete.appendChild(refuse_span);
+            btnDelete.setAttribute('class', 'am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only');
+            btnDelete.setAttribute('id', i);
+            btnDelete.setAttribute('onclick', 'refuse(this.id)');
+            btnDelete.setAttribute('type', 'button');
+
+            var div1 = document.createElement('div');
+            div1.setAttribute('class', 'am-btn-group am-btn-group-xs');
+            div1.appendChild(btnEdit);
+            div1.appendChild(btnDelete);
+
+            var div2 = document.createElement('div');
+            div2.setAttribute('class', 'am-btn-toolbar');
+            div2.appendChild(div1);
+
+            var buttons = document.createElement('td');
+            buttons.appendChild(div2);
+
+            obj.appendChild(librarian_id);
+            obj.appendChild(email);
+            obj.appendChild(buttons);
+
+            var parent = document.getElementById('tUser');
+            parent.appendChild(obj);
+        }
+
+
+        socket.on("notPendingList", function (data) {
+            npl = data.result;
+            var obj1 = document.getElementById('tUser1');
+
+            while (obj1.childNodes.length > 0) {
+                obj1.removeChild(obj1.lastChild);
+            }
+            for (var i = 0; i < npl.length; i++) {
+                addNotPendingItem(npl[i], i);
+            }
+        });
+
+
+        socket.on("pendingList", function (data) {
+            pl = data.result;
+            var obj1 = document.getElementById('tUser');
+
+            while (obj1.childNodes.length > 0) {
+                obj1.removeChild(obj1.lastChild);
+            }
+            for (var i = 0; i < pl.length; i++) {
+                addPendingItem(pl[i], i);
+            }
+        });
+
+        socket.emit("getPending");
+        socket.emit("getNotPending");
+
+    </script>
+</body>
+
+</html>

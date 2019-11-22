@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="css/amazeui.min.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/app.css">
+
+    <style>
+        .admin-main {
+            padding-top: 0px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="am-cf admin-main">
+        <!-- content start -->
+        <div class="admin-content">
+            <div class="admin-content-body">
+                <div class="container" style="padding: 50px 10px 0px 10px">
+                    <div class="am-g">
+                        <div class="am-u-sm-12 am-u-md-6">
+                            <div class="am-btn-toolbar">
+                                <div class="am-btn-group am-btn-group-xs">
+                                    <button type="button" class="am-btn am-btn-danger" id="btnremove" onclick="delAll()">
+                                        <span class="am-icon-trash"></span> Off Shelf
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="am-g" style="margin-top: -30px;">
+                        <div class="am-u-sm-12">
+                            <form class="am-form" action="user/delAll.action">
+                                <table class="am-table am-table-striped am-table-hover table-main">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                Book ID
+                                            </th>
+                                            <th>
+                                                ISBN
+                                            </th>
+                                            <th>
+                                                Status
+                                            </th>
+                                            <th>
+                                                Delete
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tUser">
+                                    </tbody>
+                                </table>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- content end -->
+        </div>
+    </div>
+
+    <!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+    <!--[if (gte IE 9)|!(IE)]><!-->
+    <script src="js/jquery-1.11.3.min.js"></script>
+    <script src="js/jquery-1.11.3.min.js"></script>
+    <script src="../cookie.js"></script>>
+    <script src="../socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <!--<![endif]-->
+    <script type="text/javascript" src="myplugs/js/plugs.js"></script>
+    <script src="../ipconfig.js"></script>
+    <script>
+
+        var socket = io(ip);
+        var isbn = Cookies.get("cur_book");
+
+        var data = {};
+        data.isbn = isbn;
+
+        var copies;
+
+        socket.on("copyNotAvailable", function () {
+            alert("Specified copy is not available, Can't delete it.");
+        });
+
+        socket.on("bookNotAvailable", function () {
+            alert("Specified book is not available, Can't delete it.");
+        });
+
+        socket.on("deleteCopySuccess", function (data) {
+            if (data.deleted == true) alert("The specified copy and book have been successfully deleted.");
+            else alert("The specified copy has been successfully deleted.");
+            location.href = location.href;
+        });
+
+        socket.on("deleteBookSuccess", function () {
+            alert("The specified book has been successfully deleted.");
+            Cookies.set("update", "true");
+        });
+
+        function delAll() {
+            var del = confirm("Confirm to offshelf all?");
+            if (del == true) {
+                var username = Cookies.get("username");
+                data = {};
+                data.operation = "OffShelf";
+                data.bar_code = "ALL";
+                data.isbn = isbn;
+                data.librarian_id = username;
+                socket.emit("deleteBook", data);
+            }
+        }
+
+        function lostCopy(index) {
+            var del = confirm("Confirm to lost?");
+            if (del == true) {
+                var username = Cookies.get("username");
+                data = {};
+                data.operation = "Lost";
+                data.bar_code = copies[index].bar_code;
+                data.isbn = isbn;
+                data.librarian_id = username;
+                socket.emit("deleteCopy", data);
+            }
+        }
+
+        function damageCopy(index) {
+            var del = confirm("Confirm to damage?");
+            if (del == true) {
+                var username = Cookies.get("username");
+                data = {};
+                data.operation = "Damage";
+                data.bar_code = copies[index].bar_code;
+                data.isbn = isbn;
+                data.librarian_id = username;
+                socket.emit("deleteCopy", data);
+            }
+        }
+
+        function addCopyItem(item, i) {
+            var obj = document.createElement('tr');
+
+            var barcode = document.createElement('td');
+            barcode.innerHTML = item.bar_code;
+
+            var isbn = document.createElement('td');
+            isbn.innerHTML = item.isbn;
+
+            var status = document.createElement('td');
+            var status_span = document.createElement('span');
+            if (item.status == "available") {
+                status_span.setAttribute('class', 'am-badge am-badge-success');
+            }
+            if (item.status == "reserved") {
+                status_span.setAttribute('class', 'am-badge am-badge-danger');
+            }
+            if (item.status == 'borrowed') {
+                status_span.setAttribute('class', 'am-badge am-badge-secondary')
+            }
+            status_span.innerHTML = item.status;
+            status.appendChild(status_span);
+            //status.innerHTML = item.status;
+
+            var btnLost = document.createElement('button');
+            btnLost.innerHTML = 'Lost';
+            btnLost.setAttribute('class', 'am-btn am-btn-default am-btn-xs am-text-secondary am-hide-sm-only');
+            btnLost.setAttribute('id', i);
+            btnLost.setAttribute('onclick', 'lostCopy(this.id)');
+            btnLost.setAttribute('type', 'button');
+
+            var btnDamage = document.createElement('button');
+            btnDamage.innerHTML = 'Damage';
+            btnDamage.setAttribute('class', 'am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only');
+            btnDamage.setAttribute('id', i);
+            btnDamage.setAttribute('onclick', 'damageCopy(this.id)');
+            btnDamage.setAttribute('type', 'button');
+
+            var div1 = document.createElement('div');
+            div1.setAttribute('class', 'am-btn-group am-btn-group-xs');
+
+            div1.appendChild(btnLost);
+            div1.appendChild(btnDamage);
+
+            var div2 = document.createElement('div');
+            div2.setAttribute('class', 'am-btn-toolbar');
+            div2.appendChild(div1);
+
+            var detail = document.createElement('td');
+            detail.appendChild(div2);
+
+            obj.appendChild(barcode);
+            obj.appendChild(isbn);
+            obj.appendChild(status);
+            obj.appendChild(detail);
+
+            var parent = document.getElementById('tUser');
+            parent.appendChild(obj);
+        }
+
+        socket.on("copyList", function (data) {
+            copies = data.copy_list;
+
+            var obj = document.getElementById('tUser');
+            while (obj.childNodes.length > 0) {
+                obj.removeChild(obj.lastChild);
+            }
+            for (var i = 0; i < data.copy_list.length; i++) {
+                addCopyItem(data.copy_list[i], i);
+            }
+        });
+
+        socket.emit("getCopyList", data);
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+
+    <link rel="stylesheet" href="css/amazeui.min.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="css/amazeui.cropper.css">
+    <link rel="stylesheet" href="css/custom_up_img.css">
+    <style>
+        .admin-main {
+            padding-top: 0px;
+        }
+    </style>
+    <style type="text/css">
+        .up-img-cover {
+            width: 210px;
+            height: 279px;
+        }
+
+        .up-img-cover img {
+            width: 100%;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="am-cf admin-main">
+        <!-- content start -->
+        <div class="admin-content">
+            <div class="admin-content-body">
+                <div class="am-g">
+                    <form class="am-form am-form-horizontal" style="padding-top: 30px;">
+                        <div class="am-form-group">
+                            <label for="number" class="am-u-sm-3 am-form-label" style="text-align: right">
+                                Add Copies
+                            </label>
+
+                            <div class="am-u-sm-6 am-u-end">
+                                <input id="number" required="" oninput="value=value.replace(/[^\d]/g,'')" placeholder="Enter the number of copies"
+                                    name="number-of-book" type="text">
+
+                                <small id="helpRole">More copies.</small>
+                            </div>
+                        </div>
+
+
+
+                        <div class="am-form-group">
+                            <label for="location" class="am-u-sm-3 am-form-label" style="text-align: right">
+                                Location
+                            </label>
+                            <div class="am-u-sm-6 am-u-end">
+                                <select id="locationSelect" name="type" required>
+                                    <option value="">Select a Location</option>
+                                </select>
+                                <small id="helpRole">Floor-Room-Bookcase, e.g. 2-01-02.</small>
+                            </div>
+                        </div>
+
+                        <script src="js/jquery-1.11.3.min.js"></script>
+                        <script src="js/amazeui.min.js" charset="utf-8"></script>
+                        <script src="js/cropper.min.js" charset="utf-8"></script>
+                        <script src="js/custom_up_img.js" charset="utf-8"></script>
+
+                        <div class="am-form-group">
+                            <div class="am-u-sm-9 am-u-sm-push-3">
+                                <button onclick="plusBook()" class="am-btn am-btn-success">ADD COPIES</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script src="../cookie.js"></script>
+<script src="../socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<script src="../ipconfig.js"></script>
+<script>
+    var socket = io(ip);
+    var isbn = Cookies.get("cur_book");
+    var data = {};
+    data.isbn = isbn;
+
+    socket.on("barcodeList", function (data) {
+        Cookies.set("barcode_list", data.barcode_list, { expires: 1 });
+        window.open("bar-code.html");
+    });
+
+    socket.on("addBookSuccess", function () {
+        window.alert("Add book success.");
+        Cookies.set("update", "true");
+    });
+
+    socket.on("CatLocList", function (data) {
+      
+        var locationParent = document.getElementById('locationSelect');
+        var location = data.location;
+       
+        while (locationParent.childNodes.length > 0) {
+            locationParent.removeChild(locationParent.lastChild);
+        }
+
+        var select_loc = document.createElement("option");
+        select_loc.innerHTML = "Select a Location";
+
+        locationParent.appendChild(select_loc);
+        var locationList = [];
+        for (var i = 0; i < location.length; i++) {
+            locationList.push(document.createElement("option"));
+            locationList[i].setAttribute("id", location[i].location);
+            locationList[i].innerHTML = location[i].location;
+            locationParent.appendChild(locationList[i]);
+        }
+
+    });
+
+    function plusBook() {
+        if ($("#locationSelect").find("option:selected").text() == "Select a Location") { alert("Please Select a Location"); return; }
+
+        var convert = {};
+        var number = parseInt($("#number").val());
+        if (number <= 0 || $("#number").val() == "") {
+            alert("Can't add lower than 1 books");
+            return;
+        }
+        
+        convert.number = number;
+        convert.isbn = isbn;
+        convert.location = $("#locationSelect").find("option:selected").text();
+        socket.emit("plusBook", convert);
+    }
+
+    socket.emit("getCatLocList");
+    socket.emit("getBookDetail", data);
+
+
+</script>
+
+</html>

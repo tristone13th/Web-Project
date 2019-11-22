@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+
+    <link rel="stylesheet" href="css/amazeui.min.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/app.css">
+    <style>
+        .admin-main{
+				padding-top: 0px;
+			}
+		</style>
+</head>
+
+
+
+
+<body>
+
+    <div class="am-cf admin-main">
+        <!-- content start -->
+        <div class="admin-content">
+            <div class="admin-content-body">
+                <div class="am-g">
+                    <form class="am-form am-form-horizontal" style="padding-top: 30px;">
+                        <input value="504" name="roleId" type="hidden">
+                        <div class="am-form-group">
+                            <label for="user-name" class="am-u-sm-3 am-form-label" style="text-align: right">
+                                Name
+                            </label>
+                            <div class="am-u-sm-8 am-u-end">
+                                <input id="roleName" required="" placeholder="Enter librarian's name." value="" name="roleName"
+                                    type="text">
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="user-name" class="am-u-sm-3 am-form-label" style="text-align: right">
+                                Gender
+                            </label>
+                            <div class="am-u-sm-8 am-u-end">
+                                <input id="male" type="radio" name="sex" value="male" checked> Male
+                                <br />
+                                <input id="female" type="radio" name="sex" value="female"> Female
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="phone" class="am-u-sm-3 am-form-label" style="text-align: right">
+                                Phone
+                            </label>
+                            <div class="am-u-sm-8 am-u-end">
+                                <input id="phone" required="" maxlength="11" placeholder="Enter librarian's phone." oninput="value=value.replace(/[^\d]/g,'')"
+                                       value="" name="userPhone" type="text">
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <label for="email" class="am-u-sm-3 am-form-label" style="text-align: right">
+                                Email
+                            </label>
+                            <div class="am-u-sm-8 am-u-end">
+                                <input id="email" required="" placeholder="Enter librarian's email." value="" name="userEmail"
+                                    type="text">
+                            </div>
+                        </div>
+                        <div class="am-form-group">
+                            <div class="am-u-sm-9 am-u-sm-push-3">
+                                <button onclick="addRole()" class="am-btn am-btn-success">ADD</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script src="../cookie.js"></script>
+<script src="../socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<script src="../ipconfig.js"></script>
+<script>
+    var socket = io(ip);
+    var auth_data = {};
+    auth_data.username = Cookies.get("username");
+    auth_data.session = Cookies.get("session");
+    auth_data.type = Cookies.get("type");
+
+    socket.on("addLibrarianRoleSuccess", function (data) {
+        window.alert("Successfully add role.\nYour ID is " + data.librarian_id + "\n" + "Your password is 00010001.");
+        Cookies.set("update", "true");
+    });
+
+    function addRole() {
+        if (!($("#roleName").val()).trim()) {
+            alert("Please input librarian's name!");
+            return;
+        }
+
+        if ($("#phone").val().length != 11) {
+            alert("Phone is invalid!");
+            return;
+        }
+        var myreg2 = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+        if (!myreg2.test($("#email").val())) {
+            alert("Email address is invalid!");
+            return;
+        }
+
+        var data = {};
+        data.name = $("#roleName").val();
+        if (document.getElementById("male").checked) data.gender = "Male";
+        else data.gender = "Female";
+        data.phone = $("#phone").val();
+        data.email = $("#email").val();
+        socket.emit("addLibrarianRole", data);
+    }
+
+</script>
+
+</html>
