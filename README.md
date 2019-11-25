@@ -1,14 +1,68 @@
 # Web-Project
 
-A book management web project demo named `Bibliosoft`.
+A book management web project demo named `Bibliosoft` using `Node.js`.
 
-## Screen shots
+# Screen shots
 
 |  ![](doc/reader_index.png)   | ![](doc/reader_login.png) |
 | :--------------------------: | :-----------------------: |
 | ![](doc/librarian_index.png) | ![](doc/admin_index.png)  |
 
-## Prerequisites
+# Backlog
+
+## Product Backlog
+
+### Admin
+
+- 登入&登出
+- 修改密码
+- 添加librarian，密码默认为00010001
+- 管理（编辑/删除）librarian
+- 修改书籍逾期罚金（默认为1元/天）
+- 修改书籍归还期限（默认为30天）
+- 修改读者注册时缴纳的保证金（默认为300元）
+- 搜索librarian，查看librarian列表
+- 帮助librarian找回密码
+
+### Librarian
+
+- 登入&登出
+- 修改密码
+- 注册reader，手机号为用户名，密码默认为12345678
+- 管理（编辑/删除）reader，删除时须确保罚金已还清&书已归还（删除条件未调整）
+- 加书（位置和价格必需），生成条形码（位置未从后端读入）
+- 编辑书籍信息
+- 删除书籍，精确到书籍&副本，保存和浏览删除书籍的操作记录（包含操作人）
+- 搜书
+- 借书（一个账号最多同时借阅3本书）
+- 还书
+- 浏览reader的借书、还书、罚金记录（未显示当前待支付金额）
+- 浏览图书馆收入记录（按天/月/年），收入包含保证金和罚金
+- 添加/编辑/删除主页的公告
+- 添加/编辑书籍类别
+- 添加/编辑/删除位置
+- 在admin的帮助下找回密码
+
+### Reader
+
+- 登入/登出
+- 修改个人信息和密码
+- 查书
+- 预约2小时
+- 浏览借书、还书、缴纳罚金记录和当前待支付罚金
+- 书籍到期前收到邮件提醒
+- 通过邮件找回密码
+
+## 其他
+
+* 须包含英文界面
+* 使用产品LOGO
+* 须有页眉页脚
+* 主页须有：搜索、登录、公告
+* 须测试所有输入的空值和错误值
+* 隐藏Admin登录界面
+
+# Prerequisites
 
 - Windows;
 - Nginx;
@@ -22,9 +76,9 @@ A book management web project demo named `Bibliosoft`.
   - node-schedule;
   - emailjs.
 
-## How to deploy
+# How to deploy
 
-### Install dependencies
+## Install dependencies
 
 - Visit www.mongodb.com and download and install `mongoDB server`;
 
@@ -59,7 +113,7 @@ A book management web project demo named `Bibliosoft`.
   npm install
   ```
 
-### Initialization
+## Initialization
 
 - Start `mongoDB` server:
 
@@ -158,7 +212,7 @@ A book management web project demo named `Bibliosoft`.
   pm2 flush
   ```
 
-## Test
+# Test
 
 Open your browser and enter 
 
@@ -174,6 +228,6 @@ to test `librarian` login and enter
 
 to test `reader` login.
 
-## Some tips
+# Some tips
 
 - If you cannot connect the socket, update your server's firewall rule;
