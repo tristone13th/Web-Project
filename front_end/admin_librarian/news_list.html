@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+
+    <link rel="stylesheet" href="css/amazeui.min.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/app.css">
+</head>
+
+<body>
+
+    <div class="am-cf admin-main">
+        <!-- content start -->
+        <div class="admin-content">
+            <div class="admin-content-body">
+                <div class="am-cf am-padding">
+                    <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg" style="font-size: 25px">Post
+                            Management</strong></div>
+                </div>
+                <div class="container" style="padding: 10px 10px 0px 10px">
+                    <div class="am-g">
+                        <div class="am-u-sm-12 am-u-md-6">
+                            <div class="am-btn-toolbar">
+                                <div class="am-btn-group am-btn-group-xs">
+
+                                    <button type="button" class="am-btn am-btn-warning btnAdd">
+                                        <span class="am-icon-plus"></span> ADD
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="collapse-panel-4" class="am-panel-bd am-collapse am-in">
+                        <ul id="news" class="am-list admin-content-task">
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+            <!-- content end -->
+        </div>
+    </div>
+
+
+    <script src="../cookie.js"></script>>
+    <script src="../socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="../ipconfig.js"></script>
+    <script>
+        var socket = io(ip);
+        Cookies.set("update", "false");
+        var items = [];
+        function editItem(index) {
+            Cookies.set("cur_news_title", items[index].title, { expires: 1 });
+            $.jq_Panel({
+                title: "Edit News",
+                url: "edit_announcement.html",
+                top: 300,
+                iframeWidth: 950,
+                iframeHeight: 400,
+            });
+        }
+
+        socket.on("deleteAnnouncementSuccess", function (data) {
+            window.alert("DeleteAnnouncement success.");
+            location.href = location.href;
+        });
+
+        function deleteItem(index) {
+            var del = confirm("Confirm to delete?");
+            if (del == true) {
+                var data = {};
+                data.title = items[index].title;
+                socket.emit("deleteAnnouncement", data);
+            }
+        }
+
+        function addAnnouncementItem(item, i) {
+            var obj = document.createElement("li");
+            var title = document.createElement("div");
+            title.setAttribute("class", 'admin-task-title');
+            title.innerText = item.title;
+            var date = document.createElement("div");
+            date.setAttribute("class", 'admin-task-meta');
+            date.innerText = "Posted on " + item.date.substring(0, 10) + " by " + item.librarian_id;
+            var content = document.createElement("div");
+            content.setAttribute("class", 'admin-task-bd');
+            content.innerText = item.content;
+
+            var edit_span = document.createElement('span');
+            edit_span.setAttribute("class", "am-icon-pencil");
+
+            var delete_span = document.createElement('span');
+            delete_span.setAttribute("class", "am-icon-times");
+
+            var edit_btn = document.createElement('button');
+            edit_btn.innerHTML = '';
+            edit_btn.appendChild(edit_span);
+            edit_btn.setAttribute('class', 'am-btn am-btn-default');
+            edit_btn.setAttribute('id', i);
+            edit_btn.setAttribute('onclick', 'editItem(this.id)');
+            edit_btn.setAttribute('type', 'button');
+
+            var delete_btn = document.createElement('button');
+            delete_btn.innerHTML = '';
+            delete_btn.appendChild(delete_span);
+            delete_btn.setAttribute('class', 'am-btn am-btn-default');
+            delete_btn.setAttribute('id', i);
+            delete_btn.setAttribute('onclick', 'deleteItem(this.id)');
+            delete_btn.setAttribute('type', 'button');
+
+            var div1 = document.createElement('div');
+            div1.setAttribute('class', 'am-btn-group am-btn-group-xs');
+            div1.appendChild(edit_btn);
+            div1.appendChild(delete_btn);
+
+            var div2 = document.createElement('div');
+            div2.setAttribute('class', 'am-btn-toolbar am-fl');
+            div2.appendChild(div1);
+
+            var button_cf = document.createElement("div");
+            button_cf.setAttribute('class', "am-cf");
+            button_cf.appendChild(div2);
+
+            obj.appendChild(title);
+            obj.appendChild(date);
+            obj.appendChild(content);
+            obj.appendChild(button_cf);
+
+            var parent = document.getElementById('news');
+            parent.appendChild(obj);
+        }
+
+        function clearItems() {
+            var obj = document.getElementById('news');
+            while (obj.childNodes.length > 0) {
+                obj.removeChild(obj.lastChild);
+            }
+        }
+
+        socket.on("AnnouncementList", function (data) {
+            clearItems();
+            data = data.annoucement_list;
+            items = data;
+            for (var i = 0; i < data.length; i++) {
+                addAnnouncementItem(data[i], i);
+            }
+        });
+
+        setInterval(function () {
+            if (Cookies.get("update") == "true") {
+                location.href = location.href;
+            }
+        }, 100);
+
+        socket.emit("getAnnouncementList");
+    </script>
+
+    <!--[if (gte IE 9)|!(IE)]><!-->
+    <script src="js/jquery-1.11.3.min.js"></script>
+    <!--<![endif]-->
+    <script type="text/javascript" src="myplugs/js/plugs.js"></script>
+    <script>
+        $(function () {
+            $(".btnAdd").click(function () {
+
+                $.jq_Panel({
+                    title: "ADD Announcement",
+                    iframeWidth: 950,
+                    iframeHeight: 400,
+                    url: "add_announcement.html"
+                });
+
+            });
+        });
+    </script>
+</body>
+
+</html>

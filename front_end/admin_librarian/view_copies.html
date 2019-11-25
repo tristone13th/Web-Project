@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="css/amazeui.min.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/app.css">
+
+
+    <style>
+        .admin-main {
+            padding-top: 0px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="am-cf admin-main">
+        <!-- content start -->
+        <div class="admin-content">
+            <div class="admin-content-body">
+                <div class="container" style="padding: 50px 10px 0px 10px">
+                    <div class="am-g" style="margin-top: -30px;">
+                        <div class="am-u-sm-12">
+                            <form class="am-form">
+                                <table class="am-table am-table-striped am-table-hover table-main">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                Book ID
+                                            </th>
+                                            <th>
+                                                Location
+                                            </th>
+                                            <th>
+                                                Borrower/Reserver
+                                            </th>
+                                            <th>
+                                                Status
+                                            </th>
+                                            <th>
+                                                Operations
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tUser">
+                                    </tbody>
+                                </table>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- content end -->
+        </div>
+    </div>
+
+    <!--[if lt IE 9]>
+<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+<script src="assets/js/amazeui.ie8polyfill.min.js"></script>
+<![endif]-->
+
+    <!--[if (gte IE 9)|!(IE)]><!-->
+    <script src="js/jquery-1.11.3.min.js"></script>
+    <script src="../cookie.js"></script>>
+    <script src="../socket.io.js"></script>
+    <script src="js/amazeui.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="dist/jquery-ean13.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <!--<![endif]-->
+    <script type="text/javascript" src="myplugs/js/plugs.js"></script>
+    <script src="../ipconfig.js"></script>
+    <script>
+
+        var socket = io(ip);
+        var isbn = Cookies.get("cur_book");
+        var data = {};
+        data.isbn = isbn;
+        var copies;
+        Cookies.set("copyUpdate", "false");
+
+        function viewBarcode(index) {
+            Cookies.set("cur_copy", copies[index].bar_code, { expires: 1 });
+            window.open("viewBarcode.html");
+            location.href = location.href;
+        }
+
+        function edit(index) {
+            Cookies.set("cur_copy", copies[index].bar_code, { expires: 1 });
+            $.jq_Panel({
+                title: "EDIT LOCATION",
+                url: "edit_copy.html",
+                iframeWidth: 400,
+                iframeHeight: 200,
+            });
+        }
+
+        function addCopyItem(item, i) {
+            var obj = document.createElement('tr');
+
+            var barcode = document.createElement('td');
+            barcode.innerHTML = item.bar_code;
+
+            var location = document.createElement('td');
+            location.innerHTML = item.location;
+
+            var br = document.createElement('td');
+            br.setAttribute("id", item.bar_code.toString());
+            br.innerHTML = "-";
+
+            var status = document.createElement('td');
+            var status_span = document.createElement('span');
+            if (item.status == "available") {
+                status_span.setAttribute('class', 'am-badge am-badge-success');
+            }
+            if (item.status == "reserved") {
+                status_span.setAttribute('class', 'am-badge am-badge-danger');
+            }
+            if (item.status == 'borrowed') {
+                status_span.setAttribute('class', 'am-badge am-badge-secondary')
+            }
+            status_span.innerHTML = item.status;
+            status.appendChild(status_span);
+
+            var btnDelete = document.createElement('button');
+            btnDelete.innerHTML = 'BARCODE';
+            btnDelete.setAttribute('class', 'am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only');
+            btnDelete.setAttribute('id', i);
+            btnDelete.setAttribute('onclick', 'viewBarcode(this.id)');
+            btnDelete.setAttribute('type', 'button');
+
+            var btnEdit = document.createElement('button');
+            btnEdit.innerHTML = 'LOCATION';
+            btnEdit.setAttribute('class', 'am-btn am-btn-default am-btn-xs am-text-primary am-hide-sm-only');
+            btnEdit.setAttribute('id', i);
+            btnEdit.setAttribute('onclick', 'edit(this.id)');
+            btnEdit.setAttribute('type', 'button');
+
+            var div1 = document.createElement('div');
+            div1.setAttribute('class', 'am-btn-group am-btn-group-xs');
+            div1.appendChild(btnDelete);
+            div1.appendChild(btnEdit);
+
+            var div2 = document.createElement('div');
+            div2.setAttribute('class', 'am-btn-toolbar');
+            div2.appendChild(div1);
+
+            var detail = document.createElement('td');
+            detail.appendChild(div2);
+
+            obj.appendChild(barcode);
+            obj.appendChild(location);
+            obj.appendChild(br);
+            obj.appendChild(status);
+            obj.appendChild(detail);
+
+            var parent = document.getElementById('tUser');
+            parent.appendChild(obj);
+        }
+
+        socket.on("copyList", function (data) {
+            copies = data.copy_list;
+            var obj = document.getElementById('tUser');
+            while (obj.childNodes.length > 0) {
+                obj.removeChild(obj.lastChild);
+            }
+            for (var i = 0; i < data.copy_list.length; i++) {
+                addCopyItem(data.copy_list[i], i);
+                if (data.copy_list[i].status == "reserved") {
+                    socket.emit("getCopyReserve", data.copy_list[i].bar_code);
+                } else if (data.copy_list[i].status == "borrowed") {
+                    socket.emit("getCopyBorrow", data.copy_list[i].bar_code);
+                }
+            }
+        });
+
+        socket.on("copyReserve", function (data) {
+            document.getElementById(data.bar_code).innerHTML = data.person;
+        });
+
+        socket.on("copyBorrow", function (data) {
+            document.getElementById(data.bar_code).innerHTML = data.person;
+        })
+
+        setInterval(function () {
+            if (Cookies.get("copyUpdate") == "true") {
+                location.href = location.href;
+            }
+        }, 100);
+
+        socket.emit("getCopyList", data);
+
+    </script>
+</body>
+
+</html>

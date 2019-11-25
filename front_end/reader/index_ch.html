@@ -1,0 +1,373 @@
+<!doctype html>
+<html class="no-js" lang="zxx">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<title>Home</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- Google font (font-family: 'Roboto', sans-serif; Poppins ; Satisfy) -->
+	<!--
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,500,600,600i,700,700i,800" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+	-->
+
+	<!-- Stylesheets -->
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/plugins.css">
+	<link rel="stylesheet" href="style.css">
+	<!-- Cusom css -->
+	<link rel="stylesheet" href="css/custom.css">
+	<!-- Modernizer js -->
+	<script src="js/vendor/modernizr-3.5.0.min.js"></script>
+</head>
+
+
+<body>
+	<!-- Main wrapper -->
+	<div class="wrapper" id="wrapper">
+		<!-- Header -->
+		<header id="wn__header" class="header__area header__absolute sticky__header ">
+			<div class="container-fluid ">
+				<div class="row">
+					<div class="col-md-6 col-sm-6 col-6 col-lg-2">
+						<div class="logo-area">
+							<a href="index_ch.html">
+								<img src="images/logo/logo黑字.png" alt="">
+							</a>
+						</div>
+					</div>
+					<div class="col-lg-8 d-none d-lg-block">
+						<nav class="mainmenu__nav">
+						</nav>
+					</div><!-- 留空 -->
+					<div class="col-md-6 col-sm-6 col-6 col-lg-2">
+						<ul class="header__sidebar__right d-flex justify-content-end align-items-center">
+							<li class="setting__bar__icon"><a class="setting__active" href="#"></a>
+								<div class="searchbar__content setting__block">
+									<div class="content-inner">
+										<div class="switcher-currency">
+											<strong class="label switcher-label">
+												<span>语言</span>
+											</strong>
+											<div class="switcher-options">
+												<div class="switcher-currency-trigger">
+													<div class="setting__menu">
+														<span><a href="index.html">English</a></span>
+														<span><a href="#">中文</a></span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<!-- <div class="switcher-currency">
+											<strong class="label switcher-label">
+												<span>Profile</span>
+											</strong>
+											<div class="switcher-options">
+												<div class="switcher-currency-trigger">
+													<div class="setting__menu">
+														<span><a href="profile.html">profile</a></span>
+														<span><a href="history.html">History</a></span>
+														<span><a href="change-password.html">Change Password</a></span>
+														<span><a href="reader-announcement.html">Announcement</a></span>
+													</div>
+												</div>
+											</div>
+										</div>  -->
+										<!-- 登录之后显示 -->
+										<div class="switcher-currency">
+											<strong class="label switcher-label">
+												<span id="topMenu">Sign in</span><!-- 登录之后变成logout -->
+											</strong>
+											<div class="switcher-options">
+												<div class="switcher-currency-trigger">
+													<div class="setting__menu">
+														<span><a id="accMenu"
+																onclick="signinLibrarianServer()">Librarian</a></span>
+														<span><a id="accLog"
+																onclick="signinReaderServer()">Reader</a></span>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</header>
+
+		<div class="slider-area brown__nav slider--15 slide__activation slide__arrow01 owl-carousel owl-theme">
+			<!-- <div class="slider-area brown__nav slider--15 slide__activation slide__arrow01"> -->
+
+
+			<div class="slide animation__style10 bg-image--9 fullscreen align__center--left">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="slider__content">
+								<div class="contentbox">
+									<h2>我们的 <span> 故事</span></h2>
+									<h2>从 <span> 这里 </span>开始</h2>
+									</br>
+								</div>
+								<div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+									<form>
+										<div class="form-row">
+											<div class="col-12 col-md-9 mb-2 mb-md-0">
+												<input class="form-control form-control-lg" id="search-content" value=""
+													placeholder="发现你感兴趣的...">
+											</div>
+											<div class="col-12 col-md-2">
+												<button type="button" class="btn btn-block btn-lg btn-primary"
+													onclick="search()">搜索</button>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- End Single Slide -->
+		</div>
+		<!-- End Slider area -->
+		<!-- Start Recent Announcement Area -->
+		<section class="wn__recent__post bg--gray ptb--80">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="section__title text-center">
+							<h2 class="title__be--2"><a href="announcement.html">通知 <span
+										class="color--theme">公告</span></a></h2>
+						</div>
+					</div>
+				</div>
+				<div class="row mt--50">
+					<div class="col-md-6 col-lg-4 col-sm-12">
+						<div class="post__itam">
+							<div class="content">
+								<h3 class="title1"><a id="title1" name=0 onclick="show_detail(0)">Just a moment </a>
+								</h3>
+								<p class="content1"><a id="content1" name=0 onclick="show_detail(0)">...</a></p>
+								<div class="post__time">
+									<span class="day" id="date1">...</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 col-lg-4 col-sm-12">
+						<div class="post__itam">
+							<div class="content">
+								<h3 class="title2"><a id="title2" name=1 onclick="show_detail(1)">Just a moment </a>
+								</h3>
+								<p class="content2"><a id="content2" name=1 onclick="show_detail(1)">...</a></p>
+								<div class="post__time">
+									<span class="day" id="date2">...</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 col-lg-4 col-sm-12">
+						<div class="post__itam">
+							<div class="content">
+								<h3 class="title3"><a id="title3" name=2 onclick="show_detail(2)">Just a moment </a>
+								</h3>
+								<p class="content3"><a id="content3" name=2 onclick="show_detail(2)">...</a></p>
+								<div class="post__time">
+									<span class="day" id="date3">...</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- End Recent Announcement Area -->
+
+		<!-- Footer Area -->
+		<footer id="wn__footer" class="footer__area bg__cat--8 brown--color">
+			<div class="footer-static-top">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="footer__widget footer__menu">
+								<div class="ft__logo">
+									<a href="index_ch.html">
+										<img src="images/logo/logo黑字.png" width="150" height="50" alt="logo">
+									</a>
+									<p style="color: rgb(117, 117, 117)">理想的书籍，是智慧的关键。 ——列夫托尔斯泰</p>
+								</div>
+								<!-- <div class="footer__content">
+									<ul class="mainmenu d-flex justify-content-center">
+										<li><a href="booklist.html">All Product</a></li>
+										<li><a href="https://weibo.com">Blog</a></li>
+										<li><a href="#">Contact</a></li>
+										<li><a href="#"><img src="images/contact/wechat.png" width="35" height="35" ></a></li>
+										<li><a href="#"><img src="images/contact/qq.png" width="35" height="35" ></a></li><
+									</ul>
+								</div> -->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="copyright__wrapper">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-12 col-md-6 col-sm-12">
+							<div class="copyright">
+								<div class="copy__right__inner text-center">
+									<p>Copyright © 2018 XDU-SPM-B2</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</footer>
+		<!-- //Footer Area -->
+
+
+	</div>
+	<!-- //Main wrapper -->
+
+	<!-- JS Files -->
+	<script src="js/vendor/jquery-3.2.1.min.js"></script>
+	<script src="js/popper.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/plugins.js"></script>
+	<script src="js/active.js"></script>
+	<script src="../socket.io.js"></script>
+	<script src="../cookie.js"></script>
+	<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+	<script src="../ipconfig.js"></script>
+
+	<script type="text/javascript">
+		var auth_data = {};
+
+		auth_data.username = Cookies.get("username");
+		auth_data.session = Cookies.get("session");
+		auth_data.type = Cookies.get("type");
+		auth_data.cur = "reader";
+
+		var annList = null;
+		var bookList = null;
+
+		var page_scale = 5;
+		var listView = document.getElementById('listView');
+		var logFlag = false;
+
+		//		window.alert(auth_data.type)
+
+		var socket = io(ip);
+
+
+
+		function search() {
+			var data = $('#search-content').val();
+			Cookies.set('search', data);
+			location.href = location.href.replace('index_ch.html', 'search_list_ch.html');
+			//socket.emit('searchReaderBooks', data);
+		}
+
+		function noLogin() {
+			topMenu.innerHTML = '登录';
+			accLog.innerHTML = '读者';
+			accMenu.innerHTML = '图书管理员';
+			logFlag = false;
+		}
+
+		function signinReaderServer() {
+			if (logFlag == false) {
+				location.href = location.href.replace('index_ch.html', 'login_ch.html');
+			} else {
+				socket.emit('logOut', auth_data);
+				noLogin();
+			}
+		}
+
+		function signinLibrarianServer() {
+			if (logFlag == false) {
+				location.href = location.href.replace('reader/index_ch.html', 'reader_login/login.html');
+			} else {
+				location.href = location.href.replace('index_ch.html', 'profile_ch.html');
+			}
+		}
+
+		socket.on('sessionSuccess', function () {
+			topMenu.innerHTML = auth_data.username;
+			accMenu.innerHTML = '个人信息';
+			accLog.innerHTML = '登出';
+			logFlag = true;
+		});
+		socket.on("noSession", function (data) {
+			Cookies.remove('type');
+			window.alert('账号已过期，请重新登录!');
+			noLogin();
+		});
+
+		socket.on("sessionFailed", function (data) {
+			Cookies.remove('type');
+			window.alert('登录已过期，请重新登录!');
+			noLogin();
+		});
+
+		socket.emit("releaseAnnouncement");
+		socket.emit('getAllAnnouncement');
+
+		socket.on("getAnnounce1", function (data) {
+			document.getElementById("title1").innerHTML = data.title;
+			document.getElementById("content1").innerHTML = data.content;
+			document.getElementById("date1").innerHTML = data.date;
+		});
+
+		socket.on("getAnnounce2", function (data) {
+			document.getElementById("title2").innerHTML = data.title;
+			document.getElementById("content2").innerHTML = data.content;
+			document.getElementById("date2").innerHTML = data.date;
+		});
+
+		socket.on("getAnnounce3", function (data) {
+			document.getElementById("title3").innerHTML = data.title;
+			document.getElementById("content3").innerHTML = data.content;
+			document.getElementById("date3").innerHTML = data.date;
+		});
+
+		socket.on('show_announcement', function (data) {
+			annList = data;
+		});
+
+		function show_detail(index) {
+			var item = annList[index];
+
+			Cookies.set('cur_ann', item.title, { expires: 1 });
+			window.open('single-announcement.html');
+		}
+
+
+
+		// 获取button内容
+
+		var bntVal = document.getElementById("SI");
+
+		// 判断当前用户是否登陆，若登陆则button内容为“LOG OUT”并判断session，反之为"SIGN IN"
+
+		if (auth_data.type == "reader") {
+			socket.emit("sessionAuth", auth_data);
+		} else {
+			noLogin();
+		}
+		//window.alert('!!!');
+		// button内容为SIGN IN，则按键后进入login.html，反之logOut且button内容改为“SIGN IN”
+
+	</script>
+
+</body>
+
+</html>

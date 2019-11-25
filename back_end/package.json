@@ -1,0 +1,11 @@
+{
+    "name": "bibliosoft",
+    "version": "1.0.0",
+    "dependencies": {
+        "emailjs": "^2.2.0",
+        "mongodb": "^3.3.4",
+        "node-schedule": "^1.3.2",
+        "request-json": "^0.6.4",
+        "socket.io": "^2.3.0"
+    }
+}
